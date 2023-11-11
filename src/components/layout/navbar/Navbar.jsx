@@ -1,21 +1,18 @@
 import { Stack } from "@mui/material";
-import "../navbar/Navbar.css";
-import CartWidget from "../../common/cartWidget/CartWidget";
-import Logo from "../../common/logo/Logo";
+import "./Navbar.css";
+import CartWidget from "../../common/CartWidget/CartWidget";
+import Logo from "../../common/Logo/Logo";
 
-
-const Navbar = () => {
+export const Navbar = () => {
   return (
     <Stack direction="row" className="container">
-      <Logo/>
+      <Logo />
       <ul>
         <li>Home</li>
         <li>Productos</li>
         <li>Contacto</li>
       </ul>
-      <CartWidget/>
+      <CartWidget />
     </Stack>
   );
 };
-
-export default Navbar;

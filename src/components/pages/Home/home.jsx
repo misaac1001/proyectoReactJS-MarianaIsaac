@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Navbar } from "../../layout/navbar/Navbar";
 import { ItemList } from "../itemList/ItemList";
+import NavBar from "../../layout/Navbar/Navbar";
+import "./home.css";
 
 export const Home = () => {
   const [saludos, setSaludo] = useState("hola que tal");
@@ -9,7 +10,7 @@ export const Home = () => {
   };
   return (
     <div>
-      <Navbar />
+      <NavBar />
       <ItemList saludos={saludos} saludo={saludo} />
     </div>
   );

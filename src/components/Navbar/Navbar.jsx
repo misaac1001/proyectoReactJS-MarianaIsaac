@@ -1,6 +1,8 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "./Navbar.css";
 import { Logo } from "../Logo/Logo";
+import { CarritoIcono } from "../CarritoIcono/CarritoIcono";
+import { Link } from "react-router-dom";
 
 export const NavBar = () => {
   return (
@@ -8,8 +10,7 @@ export const NavBar = () => {
       <Container>
         <Navbar.Brand href="#home">
           {" "}
-          <Logo/>
-          {" "}
+          <Logo />{" "}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -20,11 +21,10 @@ export const NavBar = () => {
             <Nav.Link href="#pricing">Contacto</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#pricing">
-              {" "}
-            <Carri
-             {" "}
-            </Nav.Link>
+            <Nav.Link href="#pricing"></Nav.Link>
+            <Link className="btn" to="/">
+              <CarritoIcono />
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

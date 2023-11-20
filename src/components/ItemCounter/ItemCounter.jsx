@@ -1,7 +1,10 @@
-import { useCounter } from "../../useCounter/useCounter";
+import { useCounter } from "../Hook/useCounter";
 
 export const ItemCounter = ({ inital = 1, stock = 6, onAdd }) => {
-  const { counter, handleSumar, handleRestar } = useCounter({min: inital, max: stock});
+  const { counter, handleSumar, handleRestar } = useCounter({
+    min: inital,
+    max: stock,
+  });
 
   const handleOnAdd = () => {
     onAdd(counter);

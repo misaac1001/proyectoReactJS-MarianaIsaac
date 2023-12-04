@@ -19,10 +19,10 @@ export const ItemListCountainer = ({ greeting }) => {
         .catch((error) => console.log(error));
     }
   }, [cid]);
-  console.log(cid);
+
   return (
     <div>
-      <h2>{greeting}</h2>
+      <h2>Bienvenidos a: {greeting}</h2>
       <ItemList product={products} />
     </div>
   );

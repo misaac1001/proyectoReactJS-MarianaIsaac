@@ -6,7 +6,7 @@ const products = [
     desc: "lorem ipsum",
     categoria: "plantas",
     precio: 10,
-    stock: 5,
+    stock: 7,
   },
   {
     id: "2",
@@ -15,7 +15,7 @@ const products = [
     desc: "lorem ipsum",
     categoria: "plantas",
     precio: 15,
-    stock: 5,
+    stock: 10,
   },
   {
     id: "3",
@@ -24,7 +24,7 @@ const products = [
     desc: "lorem ipsum",
     categoria: "macetas",
     precio: 20,
-    stock: 5,
+    stock: 15,
   },
   {
     id: "4",
@@ -33,7 +33,7 @@ const products = [
     desc: "lorem ipsum",
     categoria: "macetas",
     precio: 25,
-    stock: 5,
+    stock: 30,
   },
   {
     id: "5",
@@ -42,7 +42,7 @@ const products = [
     desc: "lorem ipsum",
     categoria: "plantas",
     precio: 30,
-    stock: 5,
+    stock: 12,
   },
 ];
 

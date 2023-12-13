@@ -1,9 +1,8 @@
-import { useContext } from "react";
+import { UseCartContext } from "../../context/CartContext";
 import Intercambiabilidad from "../Intercambiabilidad";
-import { CartContext } from "../../context/CartContext";
 
 export const ItemDetail = ({ product }) => {
-  const { addProduct } = useContext(CartContext);
+  const { addProduct } = UseCartContext();
 
   const onAdd = (cantidad) => {
     addProduct({ ...product, cantidad });

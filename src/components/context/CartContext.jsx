@@ -1,9 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const CartContext = createContext([]);
+const CartContext = createContext([]);
+export const UseCartContext = () => useContext(CartContext);
 
 export const CartContextProvider = ({ children }) => {
   const [cartList, setCartList] = useState([]);
+
   const addProduct = (product) => {
     setCartList([...cartList, product]);
   };
@@ -12,14 +14,19 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const cantTotalProduct = () => {
-    return cartList.reduce((total, product) => total + product.cantidad, 0);
+    const cantTotal = cartList.reduce(
+      (total, product) => total + product.cantidad,
+      0
+    );
+    return cantTotal;
   };
 
   const precioTotalProduct = () => {
-    return cartList.reduce(
+    const totalPrecio = cartList.reduce(
       (total, product) => total + product.precio * product.cantidad,
       0
     );
+    return totalPrecio;
   };
 
   const eliminarProductId = (id) => {
@@ -27,10 +34,6 @@ export const CartContextProvider = ({ children }) => {
     setCartList(productoEliminado);
   };
 
-  //Hacer:
-  //Cartidad total de productos
-  //precio total de productos
-  //eliminar productos por id
   console.log(cartList);
   return (
     <CartContext.Provider

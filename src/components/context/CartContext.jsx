@@ -7,7 +7,19 @@ export const CartContextProvider = ({ children }) => {
   const [cartList, setCartList] = useState([]);
 
   const addProduct = (product) => {
-    setCartList([...cartList, product]);
+    const existingProduct = cartList.find((p) => p.id === product.id);
+
+    if (existingProduct) {
+      const updatedCart = cartList.map((p) =>
+        p.id === product.id
+          ? { ...p, cantidad: p.cantidad + product.cantidad }
+          : p
+      );
+
+      setCartList(updatedCart);
+    } else {
+      setCartList([...cartList, product]);
+    }
   };
   const vaciarCarrito = () => {
     setCartList([]);

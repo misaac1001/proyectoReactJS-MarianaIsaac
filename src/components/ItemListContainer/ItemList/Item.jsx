@@ -1,5 +1,7 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
-export const Item = ({ product }) => {
+
+export const Item = memo(({ product }) => {
   return (
     <div key={product.id} className="card w-25">
       <div className="card-body p-0">
@@ -15,4 +17,5 @@ export const Item = ({ product }) => {
       <div className="card-footer"></div>
     </div>
   );
-};
+});
+Item.displayName = "Item";

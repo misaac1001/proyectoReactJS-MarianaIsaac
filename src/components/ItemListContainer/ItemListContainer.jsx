@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { miFetch } from "../helpers/miFetch";
+/* import { miFetch } from "../helpers/miFetch"; 
+import { useParams } from "react-router-dom";*/
 import { ItemList } from "./ItemList/ItemList";
-import { useParams } from "react-router-dom";
 import { Loading } from "../Loading/Loading";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 export const ItemListCountainer = ({ greeting }) => {
-  const [products, setProduct] = useState([]);
+  const [product, setProducts] = useState({});
   const [loading, setLoading] = useState(true);
-  const { cid } = useParams();
+  /*   const [products, setProduct] = useState([]);
+  
+  const { cid } = useParams();*/
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (cid) {
       miFetch()
         .then((respuesta) =>
@@ -22,7 +25,16 @@ export const ItemListCountainer = ({ greeting }) => {
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }
-  }, [cid]);
+  }, [cid]); */
+  useEffect(() => {
+    const dbFirestore = getFirestore();
+    const queryDoc = doc(dbFirestore, "product", "8ybPJJhvuuF7FfqqdgBn");
+    getDoc(queryDoc)
+      .then((resultado) =>
+        setProducts({ id: resultado.id, ...resultado.data() })
+      )
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -31,3 +43,5 @@ export const ItemListCountainer = ({ greeting }) => {
     </>
   );
 };
+
+/* 1.34 firebase 1 */

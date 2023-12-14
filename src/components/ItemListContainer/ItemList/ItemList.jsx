@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Filter } from "./Filter";
 import { Item } from "./Item";
 
@@ -33,6 +34,7 @@ const productFilter = ({ product, filterState, handleFilterChange }) => (
   </>
 );
 
-export const ItemList = ({ product }) => {
+export const ItemList = memo(({ product }) => {
   return <Filter product={product}>{productFilter}</Filter>;
-};
+});
+ItemList.displayName = "ItemList";

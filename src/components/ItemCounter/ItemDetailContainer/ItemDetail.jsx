@@ -1,12 +1,40 @@
-import { UseCartContext } from "../../context/CartContext";
+import { useEffect, useState } from "react";
 import Intercambiabilidad from "../Intercambiabilidad";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { UseCartContext } from "../../context/CartContext";
 
-export const ItemDetail = ({ product }) => {
+export const ItemDetail = ({ productId }) => {
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
   const { addProduct } = UseCartContext();
 
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const dbFirestore = getFirestore();
+        const productDoc = doc(dbFirestore, "products", productId);
+        const productData = await getDoc(productDoc);
+
+        if (productData.exists()) {
+          setProduct({ id: productData.id, ...productData.data() });
+        } else {
+          console.log("No se encontraron datos para el ID proporcionado");
+        }
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId]);
+
+  
   const onAdd = (cantidad) => {
     addProduct({ ...product, cantidad });
   };
+
   return (
     <div className="row">
       <div className="col-12 text-center mt-5">

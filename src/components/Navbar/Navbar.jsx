@@ -41,7 +41,7 @@ export const NavBar = () => {
           </Nav>
           <Nav>
             <Nav.Link href="#pricing"></Nav.Link>
-            <Link className="btn" to="/">
+            <Link className="btn" to="/CartContainer">
               <CarritoIcono />
             </Link>
           </Nav>

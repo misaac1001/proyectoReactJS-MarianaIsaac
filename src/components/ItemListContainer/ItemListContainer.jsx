@@ -1,64 +1,54 @@
 import { useEffect, useState } from "react";
-/* import { miFetch } from "../helpers/miFetch"; 
-import { useParams } from "react-router-dom";*/
-import { ItemList } from "./ItemList/ItemList";
+import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { useParams } from "react-router-dom";
 import { Loading } from "../Loading/Loading";
-import { collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { ItemList } from "./ItemList/ItemList";
+
 export const ItemListCountainer = ({ greeting }) => {
-  const [products, setProducts] = useState({});
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  /*   const [products, setProduct] = useState([]);
+  const { cid } = useParams();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const dbFirestore = getFirestore();
+        const productsCollection = collection(dbFirestore, "products");
   
-  const { cid } = useParams();*/
-
-  /*  useEffect(() => {
-    if (cid) {
-      miFetch()
-        .then((respuesta) =>
-          setProduct(respuesta.filter((product) => product.categoria === cid))
-        )
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else {
-      miFetch()
-        .then((respuesta) => setProduct(respuesta))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    }
-  }, [cid]); */
-/*   useEffect(() => {
-    const dbFirestore = getFirestore();
-    const queryDoc = doc(dbFirestore, 'products', '8ybPJJhvuuF7FfqqdgBn' );
-    getDoc(queryDoc)
-      .then((resultado) => {
-        if (resultado.exists()) {
-          setProducts({id: resultado.id, ...resultado.data()})
-          console.log(resultado)
-        } else {
-          console.log("No se encontraron datos para el ID proporcionado");
+        // Crear una consulta base
+        let baseQuery = query(productsCollection);
+  
+        // Si hay un parámetro de categoría, agregar el filtro
+        if (cid) {
+          baseQuery = query(productsCollection, where("categoria", "==", cid));
         }
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
-  }, []);
-  console.log(products)
- */
-useEffect(()=> {
-  const dbFirestore = getFirestore()
-  const queryCollection = collection(dbFirestore, 'products' )
-  getDocs(queryCollection)
-  .then(resp=>setProducts(resp.docs.map(producto => ({id: producto.id, ...producto.data()}))))
-  .catch(err=>console.log(err))
-  .finally(()=>setLoading(false))
-}, []);
+  
+        const snapshot = await getDocs(baseQuery);
+        const productsData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    if (cid) {
+      fetchProducts();
+    } else {
+      setProducts([]); // Limpiar productos si no hay categoría seleccionada
+      setLoading(false);
+    }
+  }, [cid]); // Agrega 'cid' como dependencia para que se ejecute cada vez que cambie
 
-console.log(products)
+  console.log("Productos cargados:", products);
+ 
+
   return (
-    <>
+    <div>
       <h2>Bienvenidos a: {greeting}</h2>
-      {loading ? <Loading /> : <ItemList product={products} />}
-    </>
+      {loading ? <Loading /> : <ItemList products={products} />}
+    </div>
   );
 };
-
-/* 1.34 firebase 1 */

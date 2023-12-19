@@ -1,8 +1,8 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "./Navbar.css";
 import { Logo } from "../Logo/Logo";
-import { CarritoIcono } from "../CarritoIcono/CarritoIcono";
 import { Link, NavLink } from "react-router-dom";
+import CartWidget from "../CartWidget/CartWidget";
 
 export const NavBar = () => {
   return (
@@ -42,7 +42,7 @@ export const NavBar = () => {
           <Nav>
             <Nav.Link href="#pricing"></Nav.Link>
             <Link className="btn" to="/CartContainer">
-              <CarritoIcono />
+              <CartWidget />
             </Link>
           </Nav>
         </Navbar.Collapse>

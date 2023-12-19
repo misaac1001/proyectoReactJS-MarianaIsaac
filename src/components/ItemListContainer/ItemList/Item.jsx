@@ -1,7 +1,7 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { Loading } from "../../Loading/Loading";
 
 export const Item = ({ product }) => {
   const [loading, setLoading] = useState(true);
@@ -33,18 +33,24 @@ export const Item = ({ product }) => {
   }, [product.id]);
 
   return (
-    <div className="card w-25">
-      <div className="card-body p-0">
-        <img src={product.img} className="w-100" alt="Imagen de planta" />
-        <h5> {product.nombre} </h5>
-        <p>Precio: {product.precio} </p>
-        <p>Descripcion: {product.desc} </p>
-        <p>Stock: {product.stock} </p>
-        <Link to={`/detalle/${product.id}`}>
-          <button className="btn btn-outline-dark w-100">Detalles</button>
-        </Link>
-      </div>
-      <div className="card-footer"></div>
-    </div>
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="card w-25">
+          <div className="card-body p-0">
+            <img src={product.img} className="w-100" alt="Imagen de planta" />
+            <h5> {product.nombre} </h5>
+            <p>Precio: {product.precio} </p>
+            <p>Descripcion: {product.desc} </p>
+            <p>Stock: {product.stock} </p>
+            <Link to={`/detalle/${product.id}`}>
+              <button className="btn btn-outline-dark w-100">Detalles</button>
+            </Link>
+          </div>
+          <div className="card-footer"></div>
+        </div>
+      )}
+    </>
   );
 };

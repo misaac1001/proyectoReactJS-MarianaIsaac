@@ -1,31 +1,47 @@
 import { useEffect, useState } from "react";
-
-import { useParams } from "react-router-dom"; 
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useParams } from "react-router-dom";
 import { ItemDetail } from "./ItemDetail";
 import { Loading } from "../../Loading/Loading";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 export const ItemDetailContainer = () => {
-  const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
-  const { pid } = useParams(); // Obtener el parámetro de la URL
+  const { pid } = useParams();
 
   useEffect(() => {
-    const dbFirestore = getFirestore();
-    const queryDoc = doc(dbFirestore, "products", pid); // Utilizar el ID del parámetro
-    getDoc(queryDoc)
-      .then((resultado) => {
-        if (resultado.exists()) {
-          setProduct({ id: resultado.id, ...resultado.data() });
+    const fetchProductDetails = async () => {
+      try {
+        const dbFirestore = getFirestore();
+        const productDoc = doc(dbFirestore, "products", pid);
+        const productData = await getDoc(productDoc);
+
+        if (productData.exists()) {
+          setLoading(false);
         } else {
           console.log("No se encontraron datos para el ID proporcionado");
         }
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
-  }, [pid]); // Agregar pid a la dependencia del useEffect
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
 
-  console.log(product);
+    fetchProductDetails();
+  }, [pid]);
 
-  return <>{loading ? <Loading /> : <ItemDetail productId={pid} />}</>;
+  return (
+    <div className="container my-5">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 text-center">
+          {loading ? (
+            <Loading />
+          ) : (
+            <div>
+              <h1 className="mb-4">Detalle del Producto</h1>
+              <ItemDetail productId={pid} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };

@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ItemCounter } from "../ItemCounter/ItemCounter";
-import { useState } from "react";
 
 const InputCount = () => {
   return (
@@ -34,14 +34,13 @@ const Intercambiabilidad = ({ handleOnAdd, stock }) => {
   };
 
   return (
-    <center>
-      <h2>Item Description</h2>
+    <div className="text-center mt-3">
       {inputType ? (
         <ItemCounter stock={stock} onAdd={handleInter} />
       ) : (
         <InputCount />
       )}
-    </center>
+    </div>
   );
 };
 

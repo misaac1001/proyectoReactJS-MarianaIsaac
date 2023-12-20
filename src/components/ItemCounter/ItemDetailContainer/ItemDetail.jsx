@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import Intercambiabilidad from "../Intercambiabilidad";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { UseCartContext } from "../../context/CartContext";
+import Intercambiabilidad from "../Intercambiabilidad";
+import { Loading } from "../../Loading/Loading";
 
 export const ItemDetail = ({ productId }) => {
   const [product, setProduct] = useState({});
@@ -30,29 +31,31 @@ export const ItemDetail = ({ productId }) => {
     fetchProductDetails();
   }, [productId]);
 
-  
   const onAdd = (cantidad) => {
     addProduct({ ...product, cantidad });
   };
 
   return (
-    <div className="row">
-      <div className="col-12 text-center mt-5">
-        <h1>Detalle del Producto </h1>
-      </div>
-      <div className="col-6 text-center mt-5">
-        <img src={product.img} alt={product.nombre} className="img-fluid" />
-        <h2> {product.nombre} </h2>
-      </div>
-      <div className="col-6 mt-5">
-        <h5>Descripcion: {product.desc} </h5>
-        <h5>Precio: {product.precio} </h5>
-        <h5>Stock: {product.stock} </h5>
-        <Intercambiabilidad
-          handleOnAdd={(cantidad) => onAdd(cantidad)}
-          stock={product.stock}
-        />
-      </div>
+    <div className="container mt-5">
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="row">
+          <div className="col-md-6">
+            <img src={product.img} alt={product.nombre} className="img-fluid" />
+          </div>
+          <div className="col-md-6">
+            <h2>{product.nombre}</h2>
+            <p>Descripción: {product.desc}</p>
+            <p>Precio: ${product.precio}</p>
+            <p>Stock: {product.stock}</p>
+            <Intercambiabilidad
+              handleOnAdd={(cantidad) => onAdd(cantidad)}
+              stock={product.stock}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

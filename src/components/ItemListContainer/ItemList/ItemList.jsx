@@ -14,29 +14,21 @@ export const ItemList = ({ products }) => {
       )
     : products;
 
-  console.log("Productos filtrados:", filteredProducts);
-
   return (
-    <div>
-      <div>
-        <label>Buscar</label>
+    <div className="container mt-4">
+      <div className="mb-3">
+        <label htmlFor="searchInput" className="form-label">
+          Buscar
+        </label>
         <input
+          id="searchInput"
           className="form-control"
           type="text"
           value={filterState}
           onChange={handleFilterChange}
         />
       </div>
-      <br />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          gap: "20px",
-          justifyContent: "center",
-        }}
-      >
+      <div className="d-flex flex-wrap justify-content-center gap-3">
         {filteredProducts.map((product) => (
           <Item key={product.id} product={product} />
         ))}

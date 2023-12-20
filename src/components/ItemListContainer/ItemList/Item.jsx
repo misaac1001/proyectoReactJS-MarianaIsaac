@@ -6,7 +6,6 @@ import { Loading } from "../../Loading/Loading";
 export const Item = ({ product }) => {
   const [loading, setLoading] = useState(true);
 
-  // Utiliza useEffect para cargar los detalles del producto cuando el componente se monta
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -15,8 +14,6 @@ export const Item = ({ product }) => {
         const productData = await getDoc(productDoc);
 
         if (productData.exists()) {
-          // Actualiza el estado con los detalles del producto desde Firebase
-          // Puedes realizar acciones adicionales según tus necesidades
           console.log("Detalles del producto cargados:", productData.data());
         } else {
           console.log("No se encontraron datos para el ID proporcionado");
@@ -28,7 +25,6 @@ export const Item = ({ product }) => {
       }
     };
 
-    // Llama a la función para cargar los detalles del producto
     fetchProductDetails();
   }, [product.id]);
 
@@ -37,18 +33,21 @@ export const Item = ({ product }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="card w-25">
-          <div className="card-body p-0">
-            <img src={product.img} className="w-100" alt="Imagen de planta" />
-            <h5> {product.nombre} </h5>
-            <p>Precio: {product.precio} </p>
-            <p>Descripcion: {product.desc} </p>
-            <p>Stock: {product.stock} </p>
+        <div className="card mb-3" style={{ maxWidth: "18rem" }}>
+          <img
+            src={product.img}
+            className="card-img-top"
+            alt="Imagen de planta"
+          />
+          <div className="card-body">
+            <h5 className="card-title">{product.nombre}</h5>
+            <p className="card-text">Precio: {product.precio}</p>
+            <p className="card-text">Descripción: {product.desc}</p>
+            <p className="card-text">Stock: {product.stock}</p>
             <Link to={`/detalle/${product.id}`}>
               <button className="btn btn-outline-dark w-100">Detalles</button>
             </Link>
           </div>
-          <div className="card-footer"></div>
         </div>
       )}
     </>

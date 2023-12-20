@@ -8,6 +8,9 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { UseCartContext } from "../context/CartContext";
+import { OrderForm } from "./Form";
+
+import { CartProductsList } from "./CartProductsList";
 
 export const CartContainer = () => {
   const [formData, setFormData] = useState({
@@ -22,16 +25,17 @@ export const CartContainer = () => {
     email: "",
     confirmEmail: "",
   });
-  const [isId, setIsId] = useState("");
   const {
     cartList,
-    vaciarCarrito,
-    eliminarProductId,
-    cantTotalProduct,
-    precioTotalProduct,
+    emptyCart,
+    removeProductId,
+    getTotalQuantity,
+    getTotalPrice,
   } = UseCartContext();
 
   const [cartProducts, setCartProducts] = useState([]);
+  const [orderID, setOrderID] = useState(null);
+  const [orderError, setOrderError] = useState(null);
 
   const handleOrder = async (evt) => {
     evt.preventDefault();
@@ -76,7 +80,7 @@ export const CartContainer = () => {
       return;
     }
 
-    // Restablecer errores
+    // Errores
     setFormErrors({
       name: "",
       phone: "",
@@ -91,17 +95,23 @@ export const CartContainer = () => {
       nombre,
       precio,
     }));
-    order.total = precioTotalProduct();
+    order.total = getTotalPrice();
 
     const db = getFirestore();
     const orderColection = collection(db, "orders");
-    addDoc(orderColection, order)
-      .then((docRef) => getDoc(docRef))
-      .then((docSnapshot) => {
-        console.log("Documento creado:", docSnapshot.data());
-      })
-      .then((resp) => setIsId(resp.id))
-      .catch((err) => console.log(err));
+
+    try {
+      const docRef = await addDoc(orderColection, order);
+      const newOrderID = docRef.id;
+      const docSnapshot = await getDoc(docRef);
+      console.log("Documento creado:", docSnapshot.data());
+      setOrderID(newOrderID);
+    } catch (err) {
+      console.error("Error al crear la orden:", err);
+      setOrderError(
+        "Hubo un error al procesar su orden. Por favor, inténtelo de nuevo."
+      );
+    }
   };
 
   const handleOnChange = (evt) => {
@@ -149,14 +159,27 @@ export const CartContainer = () => {
   }, [cartList]);
 
   const handleCheckout = () => {
-    vaciarCarrito();
-    cartProducts.forEach((product) => eliminarProductId(product.id));
+    emptyCart();
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <h1>Carrito de Compras</h1>
-      {cartProducts.length === 0 ? (
+      {orderID ? (
+        <div className="alert alert-success" role="alert">
+          <h3>Su orden ha sido realizada con éxito.</h3>
+          <p>Su número de orden es: {orderID}</p>
+          <Link to="/">
+            <button className="btn btn-danger" onClick={handleCheckout}>
+              Volver al inicio
+            </button>
+          </Link>
+        </div>
+      ) : orderError ? (
+        <div className="alert alert-danger" role="alert">
+          <h3>{orderError}</h3>
+        </div>
+      ) : cartProducts.length === 0 ? (
         <div>
           <h3>No hay productos en el carrito</h3>
           <Link to="/">
@@ -167,64 +190,21 @@ export const CartContainer = () => {
         </div>
       ) : (
         <>
-          {cartProducts.map((product) => (
-            <div key={product.id}>
-              <img className="w-20" src={product.img} alt="" />
-              <h2>Nombre: {product.nombre}</h2>
-              <p>Cantidad: {product.cantidad}</p>
-              <p>Precio por unidad es: $ {product.precio}</p>
-              <p>Subtotal: {product.subtotal}</p>
-              <button
-                className="btn btn-danger"
-                onClick={() => eliminarProductId(product.id)}
-              >
-                X
-              </button>
-            </div>
-          ))}
-          <p>Cantidad Total: {cantTotalProduct()}</p>
-          <p>Precio Total: ${precioTotalProduct()}</p>
-          <form onSubmit={handleOrder}>
-            <label>Ingresar name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleOnChange}
-            />
-            <div className="error-message">{formErrors.name}</div>
-
-            <label>Ingresar telefono</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleOnChange}
-            />
-            <div className="error-message">{formErrors.phone}</div>
-
-            <label>Ingresar correo electrónico</label>
-            <input
-              type="text"
-              name="email"
-              value={formData.email}
-              onChange={handleOnChange}
-            />
-            <div className="error-message">{formErrors.email}</div>
-            <label>Confirmar correo electrónico</label>
-            <input
-              type="text"
-              name="confirmEmail"
-              value={formData.confirmEmail}
-              onChange={handleOnChange}
-            />
-            <div className="error-message">{formErrors.confirmEmail}</div>
-
-            <button className="btn btn-outline-primary">Terminar Compra</button>
-          </form>
+          <CartProductsList
+            cartProducts={cartProducts}
+            removeProductId={removeProductId}
+          />
+          <p className="fw-bold">Cantidad Total: {getTotalQuantity()}</p>
+          <p className="fw-bold">Precio Total: ${getTotalPrice()}</p>
           <button className="btn btn-danger" onClick={handleCheckout}>
             Vaciar Carrito
           </button>
+          <OrderForm
+            formData={formData}
+            formErrors={formErrors}
+            handleOrder={handleOrder}
+            handleOnChange={handleOnChange}
+          />
         </>
       )}
     </div>

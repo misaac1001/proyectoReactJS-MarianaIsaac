@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   collection,
   getDocs,
@@ -6,7 +7,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useParams } from "react-router-dom";
 import { Loading } from "../Loading/Loading";
 import { ItemList } from "./ItemList/ItemList";
 
@@ -24,6 +24,7 @@ export const ItemListCountainer = ({ greeting }) => {
         let baseQuery = query(productsCollection);
 
         if (cid) {
+          console.log("Filtrando por categoría:", cid);
           baseQuery = query(productsCollection, where("categoria", "==", cid));
         }
 
@@ -32,25 +33,22 @@ export const ItemListCountainer = ({ greeting }) => {
           id: doc.id,
           ...doc.data(),
         }));
-
+        console.log("Productos filtrados:", productsData);
         setProducts(productsData);
-      } catch (error) {  console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchProducts();
-}, [cid]);
+    fetchProducts();
+  }, [cid]);
 
-console.log("Productos cargados:", products);
-
-return (
-  <div>
-    <h2>Bienvenidos a: {greeting}</h2>
-    {loading ? <Loading /> : <ItemList products={products} />}
-  </div>
-);
+  return (
+    <div className="container mt-4">
+      <h2 className="text-center mb-4">Bienvenidos a: {greeting}</h2>
+      {loading ? <Loading /> : <ItemList products={products} />}
+    </div>
+  );
 };
-
-

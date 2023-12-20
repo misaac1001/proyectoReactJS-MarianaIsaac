@@ -1,8 +1,22 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import "./Navbar.css";
-import { Logo } from "../Logo/Logo";
 import { Link, NavLink } from "react-router-dom";
 import CartWidget from "../CartWidget/CartWidget";
+import { Logo } from "../Logo/Logo";
+
+const category = [
+  {
+    id: "hskdhcjshsohja",
+    name: "Plantas",
+    path: "plantas",
+    description: "Esto es una category",
+  },
+  {
+    id: "hskdhcjshsoha",
+    name: "Macetas",
+    path: "macetas",
+    description: "Esto es una category",
+  },
+];
 
 export const NavBar = () => {
   return (
@@ -14,30 +28,18 @@ export const NavBar = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <NavLink
-              className={({ isActive }) => (isActive ? "btn btn-dark" : "btn")}
-              to="/"
-            >
+            <NavLink end className="btn" to="/">
               Home
             </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? "btn btn-dark" : "btn")}
-              to="/categoria/plantas"
-            >
-              Plantas
-            </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? "btn btn-dark" : "btn")}
-              to="/categoria/macetas"
-            >
-              Macetas
-            </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? "btn btn-dark" : "btn")}
-              to="/categoria/contacto"
-            >
-              Contacto
-            </NavLink>
+            {category.map((category) => (
+              <NavLink
+                key={category.id}
+                className="btn"
+                to={`/category/${category.path}`}
+              >
+                {category.name}
+              </NavLink>
+            ))}
           </Nav>
           <Nav>
             <Nav.Link href="#pricing"></Nav.Link>
